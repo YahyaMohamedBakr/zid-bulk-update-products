@@ -49,16 +49,25 @@ $products_arr = isset($data_from_api->results)? $data_from_api->results: '' ;
 function get_arr($products){
 
     $num = isset ($_POST['num'])? $_POST['num'] :'';
-    $percentage = isset ($_POST['percentage'])? true : false;
+    $percentage = isset ($_POST['percentage'])? true : '';
     
     $new_arr = array();
     foreach($products as $index=>$product){
-        $price_adjustment = $percentage ? ($product->price * ($num / 100)) : $num;
-        $new_arr[$index] = [
-             'id'=> $product->id,
-             'price' => $product->price + $price_adjustment,
-            //  'sale_price' => $product->sale_price + $price_adjustment 
-        ];
+        $price_adjustment = empty($percentage) ? $num  : ($product->price * ($num  / 100)) ;
+        if($product->is_taxable == true){
+            $new_arr[$index] = [
+                'id'=> $product->id,
+                'price' => $product->price - ($product->price * 0.1304347826086957  ) + $price_adjustment,
+               //  'sale_price' => $product->sale_price + $price_adjustment 
+           ];
+        }else{
+            $new_arr[$index] = [
+                'id'=> $product->id,
+                'price' => $product->price + $price_adjustment,
+               //  'sale_price' => $product->sale_price + $price_adjustment 
+           ];
+        }
+       
          
      }
 return $new_arr;
@@ -188,11 +197,11 @@ if(isset($_POST['submit'])){
             </div>
             <div class="form-group">
                 <label for="percentage">Apply as Percentage:</label>
-                <!-- <input type="checkbox" name="percentage" id="percentage"> -->
-                <select name="percentage" id="percentage" >
+                <input type="checkbox" name="percentage" id="percentage">
+                <!-- <select name="percentage" id="percentage" >
                     <option></option>
                     <option value="true">yes</option>
-                </select>
+                </select> -->
             </div>
             <div class="form-group">
                 <button type="submit" name="submit">Update Products</button>
