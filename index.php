@@ -54,19 +54,19 @@ function get_arr($products){
     $new_arr = array();
     foreach($products as $index=>$product){
         $price_adjustment = empty($percentage) ? $num  : ($product->price * ($num  / 100)) ;
-        if($product->is_taxable == true){
-            $new_arr[$index] = [
-                'id'=> $product->id,
-                'price' => $product->price - ($product->price * 0.1304347826086957  ) + $price_adjustment,
-               //  'sale_price' => $product->sale_price + $price_adjustment 
-           ];
-        }else{
+        // if($product->is_taxable == true){
+        //     $new_arr[$index] = [
+        //         'id'=> $product->id,
+        //         'price' => $product->price - ($product->price * 0.1304347826086957  ) + $price_adjustment,
+        //        //  'sale_price' => $product->sale_price + $price_adjustment 
+        //    ];
+        // }else{
             $new_arr[$index] = [
                 'id'=> $product->id,
                 'price' => $product->price + $price_adjustment,
                //  'sale_price' => $product->sale_price + $price_adjustment 
            ];
-        }
+        // }
        
          
      }
